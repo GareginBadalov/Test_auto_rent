@@ -1,22 +1,25 @@
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
+from rest_framework.relations import StringRelatedField
+from rest_framework.serializers import ModelSerializer
+
 from .models import *
-
-
-class CarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Cars
-        fields = '__all__'
 
 
 class BrandsSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarBrands
-        fields = '__all__'
+        fields = ['label']
 
 
-class CarDetailSerializer(serializers.ModelSerializer):
-    brands = BrandsSerializer(required=True)
+class CarSerializer(serializers.ModelSerializer):
+    brand = BrandsSerializer(source='brand_id', read_only=True)
+
 
     class Meta:
         model = Cars
         fields = '__all__'
+
+
+
+
